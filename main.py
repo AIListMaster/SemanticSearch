@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import numpy as np
 import pandas as pd
+from typing import List
 from app.search.embeddings import get_corpus_embeddings
 from app.search.search import semantic_search
 
@@ -31,18 +33,19 @@ async def load_data():
     corpus_embeddings = get_corpus_embeddings(merged_df['combined_text'].tolist())
 
 
-@app.post("/search")
+@app.post("/search", response_model=List[dict])
 async def search(query: SearchQuery):
     top_results, cos_scores = semantic_search(query.query, corpus_embeddings)
     results = []
     for idx in top_results:
         idx = int(idx)
         results.append({
-            "User ID": merged_df.iloc[idx]['User ID'],
+            "User ID": merged_df.iloc[idx]['User ID'].item(),
             "Name": merged_df.iloc[idx]['Name'],
             "Email": merged_df.iloc[idx]['Email'],
             "Designation": merged_df.iloc[idx]['Designation'],
             "Skill": merged_df.iloc[idx]['Skill Name'],
             "Similarity Score": cos_scores[idx].item()
         })
-    return {"results": results}
+
+    return results
