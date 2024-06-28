@@ -20,14 +20,12 @@ def index():
 @app.on_event("startup")
 async def load_data():
     global merged_df, corpus_embeddings
-    user_df = pd.read_csv('app/data/user_table_live.csv')
-    skill_df = pd.read_csv('app/data/skill_table_live.csv')
-    merged_df = pd.merge(user_df, skill_df, on='User ID')
+    merged_df = pd.read_csv('app/data/merged_tables_live.csv')
     merged_df['combined_text'] = merged_df.apply(lambda row: ' '.join([
         str(row['Email']), str(row['Name']), str(row['Full Name']),
         str(row['City']), str(row['Designation']), str(row['Department']),
         str(row['Career Highlights']), str(row['Introduction']),
-        str(row['Skill Name']), str(row['Competence Level'])
+        str(row['Skills']), str(row['Project_Engagements'])
     ]), axis=1)
     corpus_embeddings = get_corpus_embeddings(merged_df['combined_text'].tolist())
 
@@ -40,10 +38,10 @@ async def search(query: SearchQuery):
         idx = int(idx)
         results.append({
             "User ID": merged_df.iloc[idx]['User ID'].item(),
-            "Name": merged_df.iloc[idx]['Name'],
+            "Full Name": merged_df.iloc[idx]['Full Name'],
             "Email": merged_df.iloc[idx]['Email'],
             "Designation": merged_df.iloc[idx]['Designation'],
-            "Skill": merged_df.iloc[idx]['Skill Name'],
+            "Skills": merged_df.iloc[idx]['Skills'],
             "Similarity Score": cos_scores[idx].item()
         })
 
