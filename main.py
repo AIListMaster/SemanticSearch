@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import numpy as np
 import pandas as pd
 from typing import List
 from app.search.embeddings import get_corpus_embeddings
