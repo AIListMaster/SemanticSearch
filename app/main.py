@@ -6,13 +6,20 @@ from app.search.search import semantic_search
 
 app = FastAPI()
 
+
 class SearchQuery(BaseModel):
     query: str
+
+
+@app.get("/")
+def index():
+    return "Semantic search API"
+
 
 @app.on_event("startup")
 async def load_data():
     global merged_df, corpus_embeddings
-    user_df = pd.read_csv('app/data/user_table.csv')
+    user_df = pd.read_csv('app/data/user_table_live.csv')
     skill_df = pd.read_csv('app/data/skill_table_live.csv')
     merged_df = pd.merge(user_df, skill_df, on='User ID')
     merged_df['combined_text'] = merged_df.apply(lambda row: ' '.join([
@@ -22,6 +29,7 @@ async def load_data():
         str(row['Skill Name']), str(row['Competence Level'])
     ]), axis=1)
     corpus_embeddings = get_corpus_embeddings(merged_df['combined_text'].tolist())
+
 
 @app.post("/search")
 async def search(query: SearchQuery):

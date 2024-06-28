@@ -3,9 +3,13 @@
 GET http://127.0.0.1:8000/
 Accept: application/json
 
-###
+### Call the /search endpoint
 
-GET http://127.0.0.1:8000/hello/User
-Accept: application/json
+POST http://127.0.0.1:8000/search
+Content-Type: application/json
+
+{
+    "query": "Show me all the users having JavaScript skills and their Designation must be Software Engineer"
+}
 
 ###
