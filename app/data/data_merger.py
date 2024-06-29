@@ -10,7 +10,7 @@ skills_df['Skill Name'] = skills_df['Skill Name'].fillna('')
 skills_df['Competence Level'] = skills_df['Competence Level'].fillna('')
 
 # Merge skills into a single string per user
-skills_df['Skill'] = skills_df['Skill Name'] + '|' + skills_df['Competence Level']
+skills_df['Skill'] = skills_df['Skill Name'] + ' with competence level ' + skills_df['Competence Level']
 skills_merged = skills_df.groupby('User ID')['Skill'].apply(lambda x: ', '.join(x)).reset_index()
 
 # Fill NaN values with an empty string in project engagement table.
@@ -19,11 +19,10 @@ project_eng_df['Start Date'] = project_eng_df['Start Date'].fillna('')
 project_eng_df['Project Responsibilities'] = project_eng_df['Project Responsibilities'].fillna('')
 
 # Merge text column to single column
-project_eng_df['Project Name'] = (project_eng_df['Project Name'] + '|' +
-                                  project_eng_df['Role Performed'] + '|' +
-                                  project_eng_df['Start Date'] + '|' +
-                                  project_eng_df['End Date'] + '|' +
-                                  project_eng_df['Project Responsibilities'])
+project_eng_df['Project Name'] = (project_eng_df['Project Name'] + ' as ' +
+                                  project_eng_df['Role Performed'] + ' from ' +
+                                  project_eng_df['Start Date'] + ' to ' +
+                                  project_eng_df['End Date'])
 project_eng_merged = project_eng_df.groupby('User ID')['Project Name'].apply(lambda x: ', '.join(x)).reset_index()
 
 # Merge the users data with the aggregated skills data
