@@ -21,12 +21,6 @@ def index():
 async def load_data():
     global merged_df, corpus_embeddings
     merged_df = pd.read_csv('app/data/merged_tables_live.csv')
-    merged_df['combined_text'] = merged_df.apply(lambda row: ' '.join([
-        str(row['Email']), str(row['Name']), str(row['Full Name']),
-        str(row['City']), str(row['Designation']), str(row['Department']),
-        str(row['Career Highlights']), str(row['Introduction']),
-        str(row['Skills']), str(row['Project_Engagements'])
-    ]), axis=1)
     corpus_embeddings = get_corpus_embeddings(merged_df['combined_text'].tolist())
 
 
@@ -41,7 +35,6 @@ async def search(query: SearchQuery):
             "Full Name": merged_df.iloc[idx]['Full Name'],
             "Email": merged_df.iloc[idx]['Email'],
             "Designation": merged_df.iloc[idx]['Designation'],
-            "Skills": merged_df.iloc[idx]['Skills'],
             "Similarity Score": cos_scores[idx].item()
         })
 

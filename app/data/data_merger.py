@@ -19,7 +19,7 @@ project_eng_df['Start Date'] = project_eng_df['Start Date'].fillna('')
 project_eng_df['Project Responsibilities'] = project_eng_df['Project Responsibilities'].fillna('')
 
 # Merge text column to single column
-project_eng_df['Project Name'] = (project_eng_df['Project Name'] + ' as ' +
+project_eng_df['Project Name'] = (project_eng_df['Project Name'] + ' project as a ' +
                                   project_eng_df['Role Performed'] + ' from ' +
                                   project_eng_df['Start Date'] + ' to ' +
                                   project_eng_df['End Date'])
