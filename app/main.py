@@ -7,6 +7,10 @@ from app.security import verify_credentials
 from app.base.embeddings import get_corpus_embeddings, get_embeddings
 from app.search.search import semantic_search
 from app.base.models import TextData
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
