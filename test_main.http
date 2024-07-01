@@ -1,11 +1,11 @@
 # Test your FastAPI endpoints
 
-GET http://127.0.0.1:8000/
+GET http://192.168.1.219:8000/
 Accept: application/json
 
 ### Call the /search endpoint
 
-POST http://127.0.0.1:8000/search
+POST http://192.168.1.219:8000/search
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ### Get text embeddings
 
-POST http://127.0.0.1:8000/embed
+POST http://192.168.1.219:8000/embed
 accept: application/json
 Authorization: Basic YXBpdXNlcjpraWxsYmlsbA==
 Content-Type: application/json
