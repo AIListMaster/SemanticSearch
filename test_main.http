@@ -9,7 +9,18 @@ POST http://127.0.0.1:8000/search
 Content-Type: application/json
 
 {
-    "query": "Show me all the users having JavaScript skills and their Designation must be Software Engineer"
+    "text": "Show me all the users having JavaScript skills and their Designation must be Software Engineer"
+}
+
+### Get text embeddings
+
+POST http://127.0.0.1:8000/embed
+accept: application/json
+Authorization: Basic YXBpdXNlcjpraWxsYmlsbA==
+Content-Type: application/json
+
+{
+  "text": "Show me all the users having JavaScript skills and their Designation must be Software Engineer"
 }
 
 ###

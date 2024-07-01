@@ -1,7 +1,7 @@
 from sentence_transformers import util
 import numpy as np
 import torch
-from app.search.embeddings import model
+from app.base.embeddings import model
 
 
 def semantic_search(query: str, corpus_embeddings: torch.Tensor, top_n: int = 10):

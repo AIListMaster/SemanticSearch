@@ -1,15 +1,17 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import HTTPBasic
+from fastapi.security.http import HTTPBasicCredentials
 import pandas as pd
 from typing import List
-from app.search.embeddings import get_corpus_embeddings
+from app.security import verify_credentials
+from app.base.embeddings import get_corpus_embeddings, get_embeddings
 from app.search.search import semantic_search
+from app.base.models import TextData
 
 app = FastAPI()
 
-
-class SearchQuery(BaseModel):
-    query: str
+# Basic auth setup
+security = HTTPBasic()
 
 
 @app.get("/")
@@ -25,8 +27,8 @@ async def load_data():
 
 
 @app.post("/search", response_model=List[dict])
-async def search(query: SearchQuery):
-    top_results, cos_scores = semantic_search(query.query, corpus_embeddings)
+async def search(query: TextData):
+    top_results, cos_scores = semantic_search(query.text, corpus_embeddings)
     results = []
     for idx in top_results:
         idx = int(idx)
@@ -39,3 +41,14 @@ async def search(query: SearchQuery):
         })
 
     return results
+
+
+@app.post("/embed")
+async def get_embedding(data: TextData, credentials: HTTPBasicCredentials = Depends(security)):
+    verify_credentials(credentials)
+    try:
+        # Generate embeddings
+        embedding = get_embeddings(data.text)
+        return {"embedding": embedding}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
