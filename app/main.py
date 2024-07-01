@@ -28,7 +28,7 @@ async def load_data():
 
 @app.post("/search", response_model=List[dict])
 async def search(query: TextData):
-    top_results, cos_scores = semantic_search(query.text, corpus_embeddings)
+    top_results, cos_scores = semantic_search(query.input, corpus_embeddings)
     results = []
     for idx in top_results:
         idx = int(idx)
@@ -48,7 +48,7 @@ async def get_embedding(data: TextData, credentials: HTTPBasicCredentials = Depe
     verify_credentials(credentials)
     try:
         # Generate embeddings
-        embedding = get_embeddings(data.text)
+        embedding = get_embeddings(data.input)
         return {"embedding": embedding}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
