@@ -178,3 +178,4 @@ yarn-error.log
 
 # Ignore generated data json
 */data/*.json
+*/data/*.pt

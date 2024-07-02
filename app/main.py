@@ -4,7 +4,6 @@ from fastapi.security.http import HTTPBasicCredentials
 import pandas as pd
 import torch
 import os
-import json
 from typing import List
 from app.security import verify_credentials
 from app.base.embeddings import get_corpus_embeddings, get_embeddings
@@ -29,21 +28,18 @@ def index():
 @app.on_event("startup")
 async def load_data():
     global merged_df, corpus_embeddings
-    vector_json = 'app/data/corpus_embeddings.json'
+    tensor_file_path = 'app/data/corpus_embeddings.pt'
 
     # Read CSV data - Needed to produce results.
     merged_df = pd.read_csv('app/data/merged_tables_live.csv')
 
-    if os.path.exists(vector_json):
-        with open(vector_json, 'r') as f:
-            # Load embeddings and convert back to tensors
-            corpus_embeddings = [torch.tensor(embedding) for embedding in json.load(f)]
+    if os.path.exists(tensor_file_path):
+        # Load tensors from file
+        corpus_embeddings = torch.load(tensor_file_path)
     else:
         corpus_embeddings = get_corpus_embeddings(merged_df['combined_text'].tolist())
-        # Convert tensors to lists for JSON serialization
-        corpus_embeddings_json = [embedding.tolist() for embedding in corpus_embeddings]
-        with open(vector_json, 'w') as f:
-            json.dump(corpus_embeddings_json, f)
+        # Save tensors to file
+        torch.save(corpus_embeddings, tensor_file_path)
 
 
 @app.post("/search", response_model=List[dict])
