@@ -3,6 +3,7 @@ import pandas as pd
 # Load the User and Skills data
 users_df = pd.read_csv('user_table_live.csv')
 skills_df = pd.read_csv('skill_table_live.csv')
+certification_df = pd.read_csv('certification_table_live.csv')
 project_eng_df = pd.read_csv('project_eng_table_live.csv')
 
 # Fill NaN values in 'Skill Name' and 'Competence Level' with an empty string
@@ -12,6 +13,12 @@ skills_df['Competence Level'] = skills_df['Competence Level'].fillna('')
 # Merge skills into a single string per user
 skills_df['Skill'] = skills_df['Skill Name'] + ' with competence level ' + skills_df['Competence Level']
 skills_merged = skills_df.groupby('User ID')['Skill'].apply(lambda x: ', '.join(x)).reset_index()
+
+# Fill NaN values in 'Certification' with an empty string
+certification_df['Certification'] = certification_df['Certification'].fillna('')
+
+# Merge certification into a single string per user
+certification_merged = certification_df.groupby('User ID')['Certification'].apply(lambda x: ', '.join(x)).reset_index()
 
 # Fill NaN values with an empty string in project engagement table.
 project_eng_df['End Date'] = project_eng_df['End Date'].fillna('')
@@ -27,6 +34,7 @@ project_eng_merged = project_eng_df.groupby('User ID')['Project Name'].apply(lam
 
 # Merge the users data with the aggregated skills data
 merged_df = pd.merge(users_df, skills_merged, on='User ID', how='left')
+merged_df = pd.merge(merged_df, certification_merged, on='User ID', how='left')
 merged_df = pd.merge(merged_df, project_eng_merged, on='User ID', how='left')
 
 # Fill NaN values in 'Skill' column with an empty string

@@ -175,3 +175,6 @@ yarn-error.log
 
 # Ignore live csv files.
 *_live.csv
+
+# Ignore generated data json
+*/data/*.json

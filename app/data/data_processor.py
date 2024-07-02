@@ -15,18 +15,24 @@ def convert_csv_to_sentences(csv_file, output_file):
         designation = row['Designation']
         department = row['Department']
         skills = row['Skills']
+        certifications = row['Certification']
         project_engagements = row['Project_Engagements']
 
-        sentence = f"{full_name}, based in {city}, is a {designation} in the {department} department. You can reach them at {email}."
+        sentence = f"{full_name}, based in {city}, is a {designation} in the {department} department. You can reach him/her at {email}."
 
         if pd.notna(skills):
             skills_list = skills.split(', ')
-            skill_sentence = " They have the following skills: " + ", ".join(skills_list) + "."
+            skill_sentence = " He has the following skills: " + ", ".join(skills_list) + "."
             sentence += skill_sentence
+
+        if pd.notna(certifications):
+            certifications_list = certifications.split(', ')
+            certifications_sentence = " He has completed the following certifications: " + ", ".join(certifications_list) + "."
+            sentence += certifications_sentence
 
         if pd.notna(project_engagements):
             project_engagements_list = project_engagements.split(', ')
-            project_sentence = " They worked on the " + ", ".join(project_engagements_list) + "."
+            project_sentence = " He worked on the " + ", ".join(project_engagements_list) + "."
             sentence += project_sentence
 
         sentences.append(sentence)
