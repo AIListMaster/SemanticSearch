@@ -1,5 +1,5 @@
 import pandas as pd
-
+from app.util import preprocess_text
 
 def convert_csv_to_sentences(csv_file, output_file):
     # Load the CSV file into a pandas DataFrame
@@ -35,7 +35,7 @@ def convert_csv_to_sentences(csv_file, output_file):
             project_sentence = " He worked on the " + ", ".join(project_engagements_list) + "."
             sentence += project_sentence
 
-        sentences.append(sentence)
+        sentences.append(preprocess_text(sentence))
 
     # Add the sentences as a new column in the DataFrame
     df['combined_text'] = sentences
