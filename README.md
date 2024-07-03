@@ -9,7 +9,10 @@ Semantic search using python, sentence_transformers and FastAPI
 
 ### Run the FastAPI application using uvicorn:
 
-` uvicorn main:app --reload  `
+` uvicorn app.main:app --reload  `
+
+### Run streamlit UI
+` streamlit run streamlit.py `
 
 Open your browser and go to http://127.0.0.1:8000/docs to access the interactive API documentation provided by FastAPI.
 
